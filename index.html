@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数字人中台</title>
+    <link rel="stylesheet" href="./styles.css?v=20260904-2" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">▦</span><span>数字人中台</span></div>
+        <div class="top-actions"><button class="icon-button" title="消息">▣</button><span class="avatar">Y</span><button class="chevron" title="更多">⌄</button></div>
+      </header>
+      <div class="layout">
+        <aside class="sidebar">
+          <nav class="nav-list" aria-label="主导航">
+            <button class="nav-item" data-module="交付管理"><span class="nav-icon">♧</span><span>交付管理</span><span class="nav-arrow">⌃</span></button>
+            <div class="nav-group">
+              <button id="dialogQueryToggle" class="nav-parent" type="button" aria-expanded="true" aria-controls="dialogQuerySubmenu"><span class="nav-icon">⌕</span><span>对话查询</span><span class="nav-arrow">⌃</span></button>
+              <div id="dialogQuerySubmenu" class="nav-submenu">
+                <button class="nav-item nav-subitem" data-module="对话追踪"><span class="nav-icon">◎</span><span>对话追踪</span></button>
+                <button class="nav-item nav-subitem" data-module="聊天记录"><span class="nav-icon">▤</span><span>聊天记录</span></button>
+                <button class="nav-item nav-subitem" data-module="模板管理"><span class="nav-icon">▧</span><span>模板管理</span></button>
+                <button class="nav-item nav-subitem" data-module="缓存刷新"><span class="nav-icon">↻</span><span>缓存刷新</span></button>
+              </div>
+            </div>
+            <button class="nav-item" data-module="声音管理"><span class="nav-icon">◖</span><span>声音管理</span><span class="nav-arrow">⌄</span></button>
+            <button class="nav-item" data-module="知识库管理"><span class="nav-icon">▱</span><span>知识库管理</span><span class="nav-arrow">⌄</span></button>
+          </nav>
+        </aside>
+        <main class="content">
+          <section id="delivery-page" class="page-section">
+            <div class="filter-card">
+              <div class="filter-title">筛选</div>
+              <div class="filters">
+                <label class="filter-field"><span>客户</span><div class="input-wrap"><input id="customerFilter" placeholder="请选择客户" /><span class="input-icon">▣</span></div></label>
+                <label class="filter-field"><span>数字人名称</span><input id="nameFilter" placeholder="请输入数字人名称" /></label>
+                <label class="filter-field"><span>数字人ID</span><input placeholder="请输入数字人ID" /></label>
+                <label class="filter-field"><span>状态</span><select id="statusFilter"><option value="">请选择状态</option><option value="待部署">待部署</option><option value="部署中">部署中</option></select></label>
+              </div>
+              <div class="filter-actions"><button class="btn btn-primary" id="searchBtn">查询</button><button class="btn btn-plain" id="resetBtn">重置</button></div>
+            </div>
+            <div class="toolbar"><button class="view-toggle" title="切换视图">▦⌄</button><button class="btn btn-primary add-btn" id="addBtn">＋ 新增数字人</button><button class="refresh" title="刷新">⟳</button></div>
+            <div class="table-card">
+              <div class="table-scroll"><table><thead><tr><th>ID</th><th>数字人ID</th><th>数字人名称</th><th>客户名称</th><th>状态</th><th>备注</th><th>创建时间 <span class="sort">↕</span></th><th>修改时间 <span class="sort">↕</span></th><th class="actions-head">操作</th></tr></thead><tbody id="humanTable"></tbody></table></div>
+              <div class="pagination"><div>每页显示 <select><option>10</option><option>20</option><option>50</option></select></div><div class="pages"><button disabled>‹</button><button class="page active">1</button><button class="page">2</button><button class="page">3</button><button class="page">4</button><button class="page">5</button><button class="page">6</button><button class="page">7</button><button>›</button></div></div>
+            </div>
+          </section>
+          <section id="placeholder-page" class="placeholder-page" hidden><div class="placeholder-icon">◫</div><h2 id="placeholder-title">对话追踪</h2><p>该模块即将开放，当前仅作导航占位。</p></section>
+          <section id="strategy-page" class="strategy-page" hidden>
+            <div class="page-heading">
+              <button id="backToList" class="back-button" aria-label="返回数字人列表">‹</button>
+              <div><div class="heading-title">对话策略</div><div id="strategyHumanName" class="heading-subtitle">宏流堂POC</div></div>
+            </div>
+            <div class="strategy-panel">
+              <div class="panel-title">基础策略</div>
+              <div class="strategy-item">
+                <div class="strategy-symbol">✣</div>
+                <div class="strategy-copy"><h3>动作设计</h3><p>配置数字人在播报过程中的动作与表情表现</p><div id="actionSummary" class="strategy-summary">通用模式 · 已选择 7 项</div></div>
+                <div class="strategy-controls"><button id="openActionDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="actionEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item">
+                <div class="strategy-symbol question-symbol">?</div>
+                <div class="strategy-copy"><h3>推荐问</h3><p>配置数字人对话界面中展示的引导问题</p><div id="questionSummary" class="strategy-summary">试着问问 · 3 个问题</div></div>
+                <div class="strategy-controls"><button id="openQuestionDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="questionEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item">
+                <div class="strategy-symbol knowledge-symbol">▤</div>
+                <div class="strategy-copy"><h3>知识库</h3><p>配置知识库索引与检索策略，辅助数字人回答问题</p><div id="knowledgeSummary" class="strategy-summary summary-disabled">知识库已关闭</div></div>
+                <div class="strategy-controls"><button id="openKnowledgeDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="knowledgeEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item"><div class="strategy-symbol search-symbol">⌕</div><div class="strategy-copy"><h3>联网搜索</h3><p>配置联网搜索范围与来源限制</p><div id="webSearchSummary" class="strategy-summary">搜索范围 · 全网</div></div><div class="strategy-controls"><button id="openWebSearchDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="webSearchEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item">
+                <div class="strategy-symbol subtitle-symbol">▤</div>
+                <div class="strategy-copy"><h3>字幕</h3><p>配置数字人播报时字幕的显示速度</p><div id="subtitleSummary" class="strategy-summary">字幕速度 6 字/秒</div></div>
+                <div class="strategy-controls"><button id="openSubtitleDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="subtitleEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item">
+                <div class="strategy-symbol language-symbol">文</div>
+                <div class="strategy-copy"><h3>语言配置</h3><p>配置数字人的播报语言与自动切换策略</p><div id="languageSummary" class="strategy-summary">播报语言 · 中文</div></div>
+                <div class="strategy-controls"><button id="openLanguageDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="languageEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item"><div class="strategy-symbol greeting-symbol">Hi</div><div class="strategy-copy"><h3>开场白</h3><p>配置数字人的开场白生成概率与预设文案</p><div id="greetingSummary" class="strategy-summary summary-disabled">开场白已关闭</div></div><div class="strategy-controls"><button id="openGreetingDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="greetingEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol silence-symbol">◌</div><div class="strategy-copy"><h3>沉默唤醒</h3><p>配置数字人在不同沉默场景下的唤醒文案</p><div id="silenceSummary" class="strategy-summary summary-disabled">沉默唤醒已关闭</div></div><div class="strategy-controls"><button id="openSilenceDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="silenceEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol risk-symbol">盾</div><div class="strategy-copy"><h3>定制风控</h3><p>配置兜底回复及输入、输出内容的风险词规则</p><div id="riskSummary" class="strategy-summary summary-disabled">定制风控已关闭</div></div><div class="strategy-controls"><button id="openRiskDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="riskEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol vision-symbol">◉</div><div class="strategy-copy"><h3>视觉能力</h3><p>配置视觉理解相关的历史轮次</p><div id="visionSummary" class="strategy-summary summary-disabled">视觉能力已关闭</div></div><div class="strategy-controls"><button id="openVisionDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="visionEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol faq-symbol">?</div><div class="strategy-copy"><h3>FAQ</h3><p>配置常见问题与固定回答，命中后严格按预设回复</p><div id="faqSummary" class="strategy-summary summary-disabled">FAQ 已关闭</div></div><div class="strategy-controls"><button id="openFaqDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="faqEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol intervention-symbol">替</div><div class="strategy-copy"><h3>输出内容干预</h3><p>按规则替换数字人输出中的指定词语或句子</p><div id="interventionSummary" class="strategy-summary summary-disabled">输出内容干预已关闭</div></div><div class="strategy-controls"><button id="openInterventionDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="interventionEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol lead-symbol">资</div><div class="strategy-copy"><h3>对话留资</h3><p>配置对话中自动触发留资的轮次与次数策略</p><div id="leadSummary" class="strategy-summary summary-disabled">对话留资已关闭</div></div><div class="strategy-controls"><button id="openLeadDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="leadEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item memory-item"><div class="strategy-symbol memory-symbol">24</div><div class="strategy-copy"><h3>24小时记忆</h3><p>保留数字人与用户的近期对话记忆</p><div id="memorySummary" class="strategy-summary summary-disabled">24小时记忆已关闭</div></div><div class="strategy-controls"><label class="switch-label"><input id="memoryEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol interrupt-symbol">打</div><div class="strategy-copy"><h3>数字人打断用户</h3><p>配置数字人主动打断用户时的类型与强度</p><div id="interruptSummary" class="strategy-summary summary-disabled">数字人打断用户已关闭</div></div><div class="strategy-controls"><button id="openInterruptDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="interruptEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="panel-title advanced-title">高级设置</div>
+              <div class="strategy-item"><div class="strategy-symbol template-symbol">算</div><div class="strategy-copy"><h3>模板及算子干预</h3><p>配置对话模板、模型及算子参数</p><div id="templateSummary" class="strategy-summary summary-disabled">模板及算子干预已关闭</div></div><div class="strategy-controls"><button id="openTemplateDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="templateEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol retrieval-symbol">垫</div><div class="strategy-copy"><h3>检索垫句</h3><p>在知识库或联网搜索任务执行时生成过程提示</p><div id="retrievalFillerSummary" class="strategy-summary">已启用 · 回复概率 100%</div></div><div class="strategy-controls"><button id="openRetrievalFillerDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="retrievalFillerEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+              <div class="strategy-item"><div class="strategy-symbol action-tag-symbol">Tag</div><div class="strategy-copy"><h3>动作tag映射</h3><p>为动作 tag 配置一个或多个映射值</p><div id="actionTagSummary" class="strategy-summary summary-disabled">动作tag映射已关闭</div></div><div class="strategy-controls"><button id="openActionTagDesign" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="actionTagEnabled" type="checkbox"><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div></div>
+            </div>
+          </section>
+          <section id="sound-strategy-page" class="sound-strategy-page" hidden>
+            <div class="page-heading">
+              <button id="backFromSoundStrategy" class="back-button" aria-label="返回数字人列表">‹</button>
+              <div><div class="heading-title">声音策略</div><div id="soundStrategyHumanName" class="heading-subtitle">宏流堂POC</div></div>
+            </div>
+            <div class="sound-strategy-panel">
+              <div class="panel-title">声音配置</div>
+              <div class="strategy-item">
+                <div class="strategy-symbol asr-symbol">ASR</div>
+                <div class="strategy-copy"><h3>ASR配置</h3><p>配置语音识别模型及识别语种</p><div id="asrSummary" class="strategy-summary">微软 · 中文</div></div>
+                <div class="strategy-controls"><button id="openAsrConfig" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="asrEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+              <div class="strategy-item">
+                <div class="strategy-symbol asr-symbol">TTS</div>
+                <div class="strategy-copy"><h3>TTS 配置</h3><p>配置语音合成模型、声音及语言</p><div id="ttsSummary" class="strategy-summary">minimax · 声音 ID 未配置 · 中文</div></div>
+                <div class="strategy-controls"><button id="openTtsConfig" class="btn btn-primary config-button">配置</button><label class="switch-label"><input id="ttsEnabled" type="checkbox" checked><span class="switch-track"><span class="switch-thumb"></span></span><span>启用</span></label></div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div id="asrModal" class="modal-layer" hidden>
+      <div class="modal compact-modal asr-modal" role="dialog" aria-modal="true" aria-labelledby="asrModalTitle">
+        <div class="modal-header"><h2 id="asrModalTitle">ASR配置</h2><button id="closeAsrModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="asr-body">
+          <label class="asr-field"><span><strong>ASR模型</strong><small>选择语音识别服务</small></span><select id="asrModel"><option value="微软">微软</option><option value="豆包">豆包</option></select></label>
+          <label class="asr-field"><span><strong>语种</strong><small>选择数字人需要识别的语言</small></span><select id="asrLanguage"><option value="中文">中文</option><option value="英文">英文</option><option value="日文">日文</option><option value="自动">自动</option><option value="韩文">韩文</option><option value="粤语">粤语</option><option value="法语">法语</option><option value="德语">德语</option><option value="西班牙语">西班牙语</option><option value="葡萄牙语">葡萄牙语</option><option value="意大利语">意大利语</option><option value="俄语">俄语</option><option value="阿拉伯语">阿拉伯语</option><option value="泰语">泰语</option><option value="越南语">越南语</option><option value="印尼语">印尼语</option><option value="马来语">马来语</option><option value="印地语">印地语</option><option value="土耳其语">土耳其语</option><option value="荷兰语">荷兰语</option><option value="波兰语">波兰语</option></select></label>
+        </div>
+        <div class="modal-footer"><button id="cancelAsrModal" class="btn btn-plain modal-button">取消</button><button id="confirmAsrModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="ttsModal" class="modal-layer" hidden>
+      <div class="modal compact-modal asr-modal" role="dialog" aria-modal="true" aria-labelledby="ttsModalTitle">
+        <div class="modal-header"><h2 id="ttsModalTitle">TTS 配置</h2><button id="closeTtsModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="asr-body tts-body">
+          <label class="asr-field"><span><strong>TTS 模型</strong><small>选择语音合成服务</small></span><select id="ttsModel"><option value="minimax">minimax</option><option value="豆包">豆包</option></select></label>
+          <label class="asr-field tts-id-field"><span><strong><b>*</b> 声音 ID</strong><small>填写语音服务提供的声音标识</small></span><input id="ttsVoiceId" placeholder="请输入声音 ID" aria-describedby="ttsVoiceIdError"><em id="ttsVoiceIdError" class="field-error" hidden>声音 ID 为必填项</em></label>
+          <label class="asr-field"><span><strong>TTS 语言</strong><small>选择需要合成的语言</small></span><select id="ttsLanguage"><option value="中文">中文</option><option value="英文">英文</option><option value="日文">日文</option><option value="自动">自动</option><option value="韩文">韩文</option><option value="粤语">粤语</option><option value="法语">法语</option><option value="德语">德语</option><option value="西班牙语">西班牙语</option><option value="葡萄牙语">葡萄牙语</option><option value="意大利语">意大利语</option><option value="俄语">俄语</option><option value="阿拉伯语">阿拉伯语</option><option value="泰语">泰语</option><option value="越南语">越南语</option><option value="印尼语">印尼语</option><option value="马来语">马来语</option><option value="印地语">印地语</option><option value="土耳其语">土耳其语</option><option value="荷兰语">荷兰语</option><option value="波兰语">波兰语</option></select></label>
+        </div>
+        <div class="modal-footer"><button id="cancelTtsModal" class="btn btn-plain modal-button">取消</button><button id="confirmTtsModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="questionModal" class="modal-layer" hidden>
+      <div class="modal question-modal" role="dialog" aria-modal="true" aria-labelledby="questionModalTitle">
+        <div class="modal-header"><h2 id="questionModalTitle">推荐问</h2><button id="closeQuestionModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="question-body">
+          <label class="question-title-field"><span>推荐问标题</span><input id="questionTitleInput" value="试着问问" placeholder="请输入推荐问标题"></label>
+          <div class="question-list-heading"><span>问题列表</span><button id="addQuestion" class="text-action">＋ 添加问题</button></div>
+          <div id="questionList" class="question-list"></div>
+        </div>
+        <div class="modal-footer"><button id="cancelQuestionModal" class="btn btn-plain modal-button">取消</button><button id="confirmQuestionModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="knowledgeModal" class="modal-layer" hidden>
+      <div class="modal knowledge-modal" role="dialog" aria-modal="true" aria-labelledby="knowledgeModalTitle">
+        <div class="modal-header"><h2 id="knowledgeModalTitle">知识库配置</h2><button id="closeKnowledgeModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="knowledge-body">
+          <label class="knowledge-field"><span>知识库索引</span><input id="knowledgeIndex" placeholder="请输入知识库索引（选填）"></label>
+          <label class="knowledge-field"><span>数字人姓名</span><input id="knowledgeHumanName" placeholder="请输入数字人姓名（选填）"></label>
+          <div class="retrieval-heading"><div><strong>检索模式</strong><p>可同时开启多种检索方式，系统会综合结果生成回答</p></div><span id="retrievalCount" class="retrieval-count">2 / 3 已启用</span></div>
+          <div class="retrieval-options">
+            <label class="retrieval-card"><input type="checkbox" id="fullTextSearch" checked><span class="retrieval-check"></span><span><strong>全文检索</strong><small>匹配知识库中的完整文本内容</small></span></label>
+            <label class="retrieval-card"><input type="checkbox" id="keywordSearch" checked><span class="retrieval-check"></span><span><strong>关键词检索</strong><small>根据关键词精准定位相关内容</small></span></label>
+            <label class="retrieval-card"><input type="checkbox" id="vectorSearch"><span class="retrieval-check"></span><span><strong>向量检索</strong><small>按语义相似度查找相关内容</small></span></label>
+          </div>
+          <div class="topk-field"><div><strong>TopK</strong><p>控制参与回答的相关内容数量</p></div><div class="topk-controls"><input id="topkRange" type="range" min="1" max="50" value="10"><input id="topkValue" type="number" min="1" max="50" value="10" aria-label="TopK 数值"></div></div>
+        </div>
+        <div class="modal-footer"><button id="cancelKnowledgeModal" class="btn btn-plain modal-button">取消</button><button id="confirmKnowledgeModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="subtitleModal" class="modal-layer" hidden><div class="modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="subtitleModalTitle"><div class="modal-header"><h2 id="subtitleModalTitle">字幕配置</h2><button id="closeSubtitleModal" class="modal-close" aria-label="关闭">×</button></div><div class="compact-body"><label class="compact-field"><span>字幕速度</span><div class="speed-input-wrap"><input id="subtitleSpeed" type="number" min="1" max="100" step="1" value="6" aria-label="字幕速度"><span>字/秒</span></div></label><p class="field-hint">请输入每秒显示的字数，数值越大字幕切换越快</p></div><div class="modal-footer"><button id="cancelSubtitleModal" class="btn btn-plain modal-button">取消</button><button id="confirmSubtitleModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="languageModal" class="modal-layer" hidden>
+      <div class="modal compact-modal language-modal" role="dialog" aria-modal="true" aria-labelledby="languageModalTitle">
+        <div class="modal-header"><h2 id="languageModalTitle">语言配置</h2><button id="closeLanguageModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="compact-body">
+          <label class="language-setting-field"><span>播报语言</span><select id="broadcastLanguage"><option value="中文">中文</option><option value="英文">英文</option><option value="日文">日文</option><option value="自动切换">自动切换</option><option value="韩文">韩文</option><option value="粤语">粤语</option><option value="法语">法语</option><option value="德语">德语</option><option value="西班牙语">西班牙语</option><option value="葡萄牙语">葡萄牙语</option><option value="意大利语">意大利语</option><option value="俄语">俄语</option><option value="阿拉伯语">阿拉伯语</option><option value="泰语">泰语</option><option value="越南语">越南语</option><option value="印尼语">印尼语</option><option value="马来语">马来语</option><option value="印地语">印地语</option><option value="土耳其语">土耳其语</option><option value="荷兰语">荷兰语</option><option value="波兰语">波兰语</option></select></label>
+          <p class="field-hint">自动切换会根据对话内容识别并选择语言</p>
+          <div class="language-settings">
+            <label class="language-setting-field"><span>时间戳语言</span><select id="timestampLanguage"><option value="中文">中文</option><option value="English">English</option><option value="日本語">日本語</option><option value="한국어">한국어</option><option value="Français">Français</option><option value="Deutsch">Deutsch</option><option value="Español">Español</option><option value="Português">Português</option><option value="Русский">Русский</option><option value="العربية">العربية</option><option value="ไทย">ไทย</option><option value="Tiếng Việt">Tiếng Việt</option></select></label>
+            <label class="language-setting-field"><span>时区</span><select id="timestampTimezone"><option value="Asia/Shanghai" data-city="北京">中国 · 北京（UTC+08:00）</option><option value="Asia/Tokyo" data-city="东京">日本 · 东京（UTC+09:00）</option><option value="Asia/Seoul" data-city="首尔">韩国 · 首尔（UTC+09:00）</option><option value="Asia/Singapore" data-city="新加坡">新加坡 · 新加坡（UTC+08:00）</option><option value="Asia/Bangkok" data-city="曼谷">泰国 · 曼谷（UTC+07:00）</option><option value="Asia/Kolkata" data-city="新德里">印度 · 新德里（UTC+05:30）</option><option value="Asia/Dubai" data-city="阿布扎比">阿联酋 · 阿布扎比（UTC+04:00）</option><option value="Asia/Riyadh" data-city="利雅得">沙特阿拉伯 · 利雅得（UTC+03:00）</option><option value="Asia/Jakarta" data-city="雅加达">印度尼西亚 · 雅加达（UTC+07:00）</option><option value="Europe/Moscow" data-city="莫斯科">俄罗斯 · 莫斯科（UTC+03:00）</option><option value="Europe/London" data-city="伦敦">英国 · 伦敦</option><option value="Europe/Paris" data-city="巴黎">法国 · 巴黎</option><option value="Europe/Berlin" data-city="柏林">德国 · 柏林</option><option value="Europe/Rome" data-city="罗马">意大利 · 罗马</option><option value="Europe/Madrid" data-city="马德里">西班牙 · 马德里</option><option value="Europe/Amsterdam" data-city="阿姆斯特丹">荷兰 · 阿姆斯特丹</option><option value="Europe/Brussels" data-city="布鲁塞尔">比利时 · 布鲁塞尔</option><option value="Europe/Stockholm" data-city="斯德哥尔摩">瑞典 · 斯德哥尔摩</option><option value="Europe/Athens" data-city="雅典">希腊 · 雅典</option><option value="Europe/Istanbul" data-city="安卡拉">土耳其 · 安卡拉</option><option value="America/New_York" data-city="华盛顿">美国 · 华盛顿</option><option value="America/Toronto" data-city="渥太华">加拿大 · 渥太华</option><option value="America/Mexico_City" data-city="墨西哥城">墨西哥 · 墨西哥城</option><option value="America/Sao_Paulo" data-city="巴西利亚">巴西 · 巴西利亚</option><option value="America/Argentina/Buenos_Aires" data-city="布宜诺斯艾利斯">阿根廷 · 布宜诺斯艾利斯</option><option value="America/Santiago" data-city="圣地亚哥">智利 · 圣地亚哥</option><option value="Australia/Sydney" data-city="堪培拉">澳大利亚 · 堪培拉</option><option value="Pacific/Auckland" data-city="惠灵顿">新西兰 · 惠灵顿</option><option value="Africa/Cairo" data-city="开罗">埃及 · 开罗</option><option value="Africa/Johannesburg" data-city="比勒陀利亚">南非 · 比勒陀利亚</option><option value="Africa/Nairobi" data-city="内罗毕">肯尼亚 · 内罗毕</option></select></label>
+          </div>
+        </div>
+        <div class="modal-footer"><button id="cancelLanguageModal" class="btn btn-plain modal-button">取消</button><button id="confirmLanguageModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="greetingModal" class="modal-layer" hidden><div class="modal greeting-modal"><div class="modal-header"><h2>开场白配置</h2><button id="closeGreetingModal" class="modal-close" aria-label="关闭">×</button></div><div class="greeting-body"><label class="compact-field"><span>模型回复概率</span><div class="percent-input"><input id="greetingProbability" type="number" min="1" max="100" value="50"><b>%</b></div></label><div class="preset-heading"><strong>预设内容</strong><div class="preset-actions"><select id="globalActionPicker" class="global-action-picker" aria-label="添加动作"><option value="">添加动作</option><option value="[act_03]">挥手</option><option value="[act_01]">点头</option></select><button id="addGreeting" class="text-action">＋ 添加内容</button></div></div><div id="greetingList" class="greeting-list"></div><p class="list-hint">点击任意输入框后，可使用右侧“添加动作”插入标签</p></div><div class="modal-footer"><button id="cancelGreetingModal" class="btn btn-plain modal-button">取消</button><button id="confirmGreetingModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="silenceModal" class="modal-layer" hidden><div class="modal silence-modal"><div class="modal-header"><h2>沉默唤醒配置</h2><button id="closeSilenceModal" class="modal-close" aria-label="关闭">×</button></div><div class="greeting-body"><label class="compact-field"><span>模型回复概率</span><div class="percent-input"><input id="silenceProbability" type="number" min="1" max="100" value="50"><b>%</b></div></label><div id="silenceGroups"></div><p class="list-hint">三种沉默场景分别配置；点击输入框后可使用右上角添加动作</p></div><div class="modal-footer"><button id="cancelSilenceModal" class="btn btn-plain modal-button">取消</button><button id="confirmSilenceModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="webSearchModal" class="modal-layer" hidden><div class="modal web-search-modal"><div class="modal-header"><h2>联网搜索配置</h2><button id="closeWebSearchModal" class="modal-close" aria-label="关闭">×</button></div><div class="web-search-body"><div class="url-section"><div class="url-heading"><strong>指定 URL</strong><button class="text-action" data-url-add="allow">＋ 添加 URL</button></div><div id="allowUrls" class="url-list"></div></div><div class="url-section"><div class="url-heading"><strong>屏蔽 URL</strong><button class="text-action" data-url-add="block">＋ 添加 URL</button></div><div id="blockUrls" class="url-list"></div></div><div class="source-heading"><strong>搜索范围</strong><span>权威来源与指定行业只能选择一项</span></div><div class="source-options"><label><input id="authoritativeOnly" type="radio" name="sourceMode" value="authority"><span>仅搜索权威来源</span></label><label><input id="industryMode" type="radio" name="sourceMode" value="industry"><span>指定行业</span></label><select id="industrySelect" disabled><option value="金融">金融行业</option><option value="游戏">游戏行业</option></select></div><div class="search-number-fields"><label><span>top_k</span><input id="webTopK" type="number" min="1" max="100" value="8"></label><label><span>item_len</span><input id="webItemLen" type="number" min="1" max="5000" value="500"></label></div></div><div class="modal-footer"><button id="cancelWebSearchModal" class="btn btn-plain modal-button">取消</button><button id="confirmWebSearchModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="riskModal" class="modal-layer" hidden>
+      <div class="modal risk-modal" role="dialog" aria-modal="true" aria-labelledby="riskModalTitle">
+        <div class="modal-header"><h2 id="riskModalTitle">定制风控配置</h2><button id="closeRiskModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="risk-body">
+          <section class="risk-section fallback-section"><div class="risk-section-heading"><div><strong>兜底回复</strong><p>触发风控时随机选择一条回复</p></div><button id="addFallback" class="text-action">＋ 添加回复</button></div><div id="fallbackList" class="fallback-list"></div><div id="fallbackCount" class="risk-count">1 / 10</div></section>
+          <div class="risk-columns">
+            <section class="risk-section"><div class="risk-section-heading"><div><strong>输入风控</strong><p>检查用户输入的内容</p></div><button class="text-action add-risk-category" data-risk-type="input">＋ 新增分类</button></div><div id="inputRiskCategories" class="risk-category-list"></div></section>
+            <section class="risk-section"><div class="risk-section-heading"><div><strong>输出风控</strong><p>检查数字人的回复内容</p></div><button class="text-action add-risk-category" data-risk-type="output">＋ 新增分类</button></div><div id="outputRiskCategories" class="risk-category-list"></div></section>
+          </div>
+        </div>
+        <div class="modal-footer"><button id="cancelRiskModal" class="btn btn-plain modal-button">取消</button><button id="confirmRiskModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <div id="visionModal" class="modal-layer" hidden><div class="modal compact-modal vision-modal"><div class="modal-header"><h2>视觉能力配置</h2><button id="closeVisionModal" class="modal-close" aria-label="关闭">×</button></div><div class="vision-body"><label class="vision-field"><span>视觉触发历史轮次</span><input id="visionTriggerRounds" type="number" min="1" max="50" value="3"></label><label class="vision-field"><span>视觉垫句历史轮次</span><input id="visionFillerRounds" type="number" min="1" max="50" value="3"></label><label class="vision-field"><span>视觉工具历史轮次</span><input id="visionToolRounds" type="number" min="1" max="50" value="3"></label></div><div class="modal-footer"><button id="cancelVisionModal" class="btn btn-plain modal-button">取消</button><button id="confirmVisionModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="faqModal" class="modal-layer" hidden><div class="modal faq-modal"><div class="modal-header"><h2>FAQ 配置</h2><button id="closeFaqModal" class="modal-close" aria-label="关闭">×</button></div><div class="faq-body"><div class="faq-match"><div><strong>Query 命中方式</strong><p>设置用户问题与 Query 的匹配规则</p></div><label><input type="radio" name="faqMatchMode" value="fuzzy"><span>模糊匹配</span></label><label><input type="radio" name="faqMatchMode" value="exact"><span>精确匹配</span></label><div id="faqExactMode" class="faq-exact-options" hidden><label><input type="radio" name="faqExactType" value="contains"><span>包含关系</span></label><label><input type="radio" name="faqExactType" value="equals"><span>完全匹配</span></label></div></div><div class="faq-list-heading"><strong>FAQ 问答组</strong><button id="addFaqGroup" class="text-action">＋ 添加问答组</button></div><div id="faqGroups" class="faq-groups"></div></div><div class="modal-footer"><button id="cancelFaqModal" class="btn btn-plain modal-button">取消</button><button id="confirmFaqModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="interventionModal" class="modal-layer" hidden><div class="modal intervention-modal"><div class="modal-header"><h2>输出内容干预配置</h2><button id="closeInterventionModal" class="modal-close" aria-label="关闭">×</button></div><div class="intervention-body"><div class="intervention-heading"><div><strong>替换规则</strong><p>命中输出内容后，将匹配文本替换为指定内容</p></div><button id="addInterventionRule" class="text-action">＋ 添加规则</button></div><div class="intervention-columns"><span>要替换的词 / 句</span><span>替换内容</span><span>匹配关系</span><span></span></div><div id="interventionRules" class="intervention-rules"></div></div><div class="modal-footer"><button id="cancelInterventionModal" class="btn btn-plain modal-button">取消</button><button id="confirmInterventionModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="leadModal" class="modal-layer" hidden><div class="modal compact-modal lead-modal"><div class="modal-header"><h2>对话留资配置</h2><button id="closeLeadModal" class="modal-close" aria-label="关闭">×</button></div><div class="lead-body"><label class="lead-field"><span>自动触发的对话轮次数</span><input id="leadTriggerRounds" type="number" min="0" max="100" value="3"><em>轮</em></label><label class="lead-field"><span>自动触发的最大次数</span><input id="leadMaxTimes" type="number" min="0" max="100" value="3"><em>次</em></label><label class="lead-field"><span>用户拒绝 X 次后禁用轮次触发</span><input id="leadRejectLimit" type="number" min="0" max="100" value="3"><em>次</em></label><p class="field-hint">设置为 0 表示不自动触发或不限制</p></div><div class="modal-footer"><button id="cancelLeadModal" class="btn btn-plain modal-button">取消</button><button id="confirmLeadModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="interruptModal" class="modal-layer" hidden><div class="modal compact-modal interrupt-modal" role="dialog" aria-modal="true" aria-labelledby="interruptModalTitle"><div class="modal-header"><h2 id="interruptModalTitle">数字人打断用户配置</h2><button id="closeInterruptModal" class="modal-close" aria-label="关闭">×</button></div><div class="interrupt-body"><div class="interrupt-intro"><strong>打断强度</strong><span>可填写 0、1、2、3 或 4，数值越高打断越积极</span></div><label class="interrupt-field"><span><strong>冗余打断</strong><small>用户表达出现重复或冗余内容时触发</small></span><input id="redundancyInterrupt" type="number" min="0" max="4" step="1" value="0"></label><label class="interrupt-field"><span><strong>纠偏打断</strong><small>用户表达存在明显偏差时触发</small></span><input id="correctionInterrupt" type="number" min="0" max="4" step="1" value="0"></label><label class="interrupt-field"><span><strong>情绪打断</strong><small>识别到强烈情绪时触发</small></span><input id="emotionInterrupt" type="number" min="0" max="4" step="1" value="0"></label></div><div class="modal-footer"><button id="cancelInterruptModal" class="btn btn-plain modal-button">取消</button><button id="confirmInterruptModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="templateModal" class="modal-layer" hidden><div class="modal template-modal" role="dialog" aria-modal="true" aria-labelledby="templateModalTitle"><div class="modal-header"><h2 id="templateModalTitle">模板及算子干预配置</h2><button id="closeTemplateModal" class="modal-close" aria-label="关闭">×</button></div><div class="template-body"><div class="template-heading"><div><strong>干预配置</strong><p>填写算子、模板和模型信息</p></div><button id="addTemplateRule" class="text-action">＋ 新增配置</button></div><div id="templateRules" class="template-rules"></div></div><div class="modal-footer"><button id="cancelTemplateModal" class="btn btn-plain modal-button">取消</button><button id="confirmTemplateModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="retrievalFillerModal" class="modal-layer" hidden><div class="modal compact-modal retrieval-filler-modal" role="dialog" aria-modal="true" aria-labelledby="retrievalFillerModalTitle"><div class="modal-header"><h2 id="retrievalFillerModalTitle">检索垫句配置</h2><button id="closeRetrievalFillerModal" class="modal-close" aria-label="关闭">×</button></div><div class="retrieval-filler-body"><label class="retrieval-filler-field"><span>模型回复概率</span><div><input id="retrievalFillerProbability" type="number" min="0" max="100" value="100"><em>%</em></div></label><label class="retrieval-filler-toggle"><span><strong>任务调度并行</strong><small>垫句与任务调度同步推进</small></span><input id="retrievalFillerParallel" type="checkbox"><i></i></label><div class="retrieval-delay-row"><label class="retrieval-filler-toggle"><span><strong>主动延迟</strong><small>延迟生成垫句，默认关闭</small></span><input id="retrievalFillerDelayEnabled" type="checkbox"><i></i></label><label class="retrieval-filler-field"><span>延迟时长</span><div><input id="retrievalFillerDelay" type="number" min="0" max="1000" value="0"><em>ms</em></div></label></div><label class="retrieval-filler-field"><span>历史轮次</span><div><input id="retrievalFillerRounds" type="number" min="0" max="10" value="3"><em>轮</em></div></label></div><div class="modal-footer"><button id="cancelRetrievalFillerModal" class="btn btn-plain modal-button">取消</button><button id="confirmRetrievalFillerModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="actionTagModal" class="modal-layer" hidden><div class="modal action-tag-modal" role="dialog" aria-modal="true" aria-labelledby="actionTagModalTitle"><div class="modal-header"><h2 id="actionTagModalTitle">动作tag映射配置</h2><button id="closeActionTagModal" class="modal-close" aria-label="关闭">×</button></div><div class="action-tag-body"><div class="action-tag-heading"><div><strong>映射配置</strong><p>每个动作 tag 可对应多个映射值</p></div><button id="addActionTagRule" class="text-action">＋ 新增动作 tag</button></div><div id="actionTagRules" class="action-tag-rules"></div></div><div class="modal-footer"><button id="cancelActionTagModal" class="btn btn-plain modal-button">取消</button><button id="confirmActionTagModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="basicInfoModal" class="modal-layer" hidden><div class="modal compact-modal basic-info-modal" role="dialog" aria-modal="true" aria-labelledby="basicInfoModalTitle"><div class="modal-header"><div><h2 id="basicInfoModalTitle">基础信息</h2><p id="basicInfoHumanName" class="modal-subtitle"></p></div><button id="closeBasicInfoModal" class="modal-close" aria-label="关闭">×</button></div><div class="basic-info-body"><div class="basic-info-heading"><strong>人设</strong><span id="personaPromptCount">0 / 30000 字</span></div><textarea id="personaPrompt" maxlength="30000" aria-describedby="personaPromptHint" placeholder="请粘贴人设 Prompt"></textarea><p id="personaPromptHint" class="field-hint">人设 Prompt 将用于设定数字人的身份、语气和表达风格，最多 30000 字</p></div><div class="modal-footer"><button id="cancelBasicInfoModal" class="btn btn-plain modal-button">取消</button><button id="confirmBasicInfoModal" class="btn btn-primary modal-button">确定</button></div></div></div>
+    <div id="actionModal" class="modal-layer" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header"><h2 id="modalTitle">动作设计</h2><button id="closeModal" class="modal-close" aria-label="关闭">×</button></div>
+        <div class="mode-switch" role="tablist"><button class="mode-tab active" data-mode="general" role="tab">通用模式</button><button class="mode-tab" data-mode="custom" role="tab">自定义模式</button></div>
+        <div id="generalMode" class="mode-panel">
+          <div class="selection-bar"><strong>已选 <span id="selectedCount">7</span> / 21 项</strong><div><button id="selectAll" class="text-action">全选</button><button id="clearSelection" class="text-action">清空</button></div></div>
+          <div id="actionOptions" class="option-content"></div>
+        </div>
+        <div id="customMode" class="mode-panel custom-panel" hidden>
+          <div class="custom-toolbar"><span>自定义 Prompt</span><button id="clearPrompt" class="text-action">全部清空</button></div>
+          <div class="prompt-sections">
+            <label class="prompt-section" for="firstPromptInput">
+              <span class="prompt-section-title">首句 Prompt</span>
+              <span class="prompt-section-hint">用于控制数字人回复首句中的动作和表情</span>
+              <textarea id="firstPromptInput" placeholder="请粘贴首句 Prompt"></textarea>
+            </label>
+            <label class="prompt-section" for="continuationPromptInput">
+              <span class="prompt-section-title">续写 Prompt</span>
+              <span class="prompt-section-hint">用于控制首句之后内容中的动作和表情</span>
+              <textarea id="continuationPromptInput" placeholder="请粘贴续写 Prompt" aria-describedby="continuationPromptError"></textarea>
+              <span id="continuationPromptError" class="prompt-validation-error" role="alert" hidden>填写首句 Prompt 后，续写 Prompt 不能为空</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer"><button id="cancelModal" class="btn btn-plain modal-button">取消</button><button id="confirmModal" class="btn btn-primary modal-button">确定</button></div>
+      </div>
+    </div>
+    <script src="./app.js?v=20260904-2"></script>
+  </body>
+</html>
